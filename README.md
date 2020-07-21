@@ -127,6 +127,33 @@ kill -9 22767
 在/etc/rc.local文件中, 将nohup php /usr/local/src/daemon.php &这个命令加入即可。
 
 
+daemonCommand.php 使用方法
+/*
+To start:
+localhost:~$ php run.php start
+//localhost:~$ php run.php start&
+ 
+To stop:
+localhost:~$ php run.php stop
+ 
+To check the status:
+localhost:~$ php run.php status
+ 
+To reload:
+localhost:~$ php run.php reload
+*/
 
 
+编写shell脚本
+monitor.sh
+#!/bin/bash
+alive=`ps aux | grep run.php | grep -v grep | wc -l`
+if [ $alive -eq 0 ]
+then
+/usr/local/php/bin/php /root/run.php start > /dev/null &
+fi
+
+
+> # crontab -e
+*/1 * * * * /usr/local/php/bin/php /data/wwwroot/shell/monitor.sh > /dev/null &
 
